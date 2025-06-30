@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -19,5 +20,7 @@ public class ClientReportDTO {
     public static class AccountDTO {
         private String accountNumber;
         private String accountType;
+        private BigDecimal initialBalance;
+        private Boolean status;
     }
 }

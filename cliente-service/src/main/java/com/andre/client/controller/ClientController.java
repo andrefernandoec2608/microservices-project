@@ -1,26 +1,22 @@
 package com.andre.client.controller;
 
 import com.andre.client.model.Client;
-import com.andre.client.producer.ClientEventProducer;
-import com.andre.client.producer.EventMain;
 import com.andre.client.service.ClientService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clients")
+@RequestMapping("/api/client")
 @Slf4j
 @RequiredArgsConstructor
 public class ClientController {
 
     private final ClientService clientService;
-    private final ClientEventProducer clientEventProducer;
 
     @GetMapping
     public List<Client> getAllClients() {
@@ -36,12 +32,7 @@ public class ClientController {
 
     @PostMapping
     public Client createClient(@RequestBody Client client) throws JsonProcessingException {
-        Client clientSaved = clientService.createClient(client);
-
-        EventMain eventMain = new EventMain(clientSaved.getClientId());
-        clientEventProducer.sendEventMainAsyn(eventMain);
-
-        return clientSaved;
+        return clientService.createClient(client);
     }
 
     @PutMapping("/{id}")

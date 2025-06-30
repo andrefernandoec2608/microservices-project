@@ -20,7 +20,8 @@ public class Movement {
 
     private LocalDateTime date;
 
-    private String movementType;
+    @Enumerated(EnumType.STRING)
+    private MovementType movementType;
 
     private BigDecimal amount;
 

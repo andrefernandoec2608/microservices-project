@@ -1,22 +1,22 @@
 package com.andre.client.service;
 
 import com.andre.client.model.Client;
+import com.andre.client.producer.ClientEventProducer;
+import com.andre.client.producer.EventMain;
 import com.andre.client.repository.ClientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ClientService {
 
     private final ClientRepository clientRepository;
-
-    @Autowired
-    public ClientService(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
+    private final ClientEventProducer clientEventProducer;
 
     public List<Client> getAllClients() {
         return clientRepository.findAll();
@@ -26,8 +26,13 @@ public class ClientService {
         return clientRepository.findById(id);
     }
 
-    public Client createClient(Client client) {
-        return clientRepository.save(client);
+    public Client createClient(Client client) throws JsonProcessingException {
+        Client clientSaved = clientRepository.save(client);
+
+        EventMain eventMain = new EventMain(clientSaved.getClientId());
+        clientEventProducer.sendEventMainAsyn(eventMain);
+
+        return clientSaved;
     }
 
     public Optional<Client> updateClient(Long id, Client updatedClient) {

@@ -13,13 +13,13 @@ spring:
             - id: client-service
               uri: http://localhost:8080
               predicates:
-                - Path=/api/clients/**
+                - Path=/api/client/**
             - id: account-service
               uri: http://localhost:8081
               predicates:
-                - Path=/api/accounts/**
+                - Path=/api/account/**
 services:
   client:
-    base-url: http://localhost:8080/api/clients
+    base-url: http://localhost:8080/api/client
   account:
-    base-url: http://localhost:8081/api/accounts
+    base-url: http://localhost:8081/api/account
